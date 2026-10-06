@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ff7a00">
+<title>Halloween Mission Rally</title>
+<style>
+:root{
+  --orange:#ff7a00;--deep:#32124f;--purple:#6c2bd9;--yellow:#ffd83d;
+  --pink:#ff5fa2;--cream:#fff7e8;--white:#fff;--green:#38b56b;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif;
+ background:radial-gradient(circle at 15% 10%,#fff1a8 0 6%,transparent 7%),linear-gradient(180deg,#2b1045,#54206e 45%,#ff7a00 140%);
+ color:#24112f;min-height:100vh}
+button,input{font:inherit}
+.app{max-width:520px;margin:auto;min-height:100vh;background:var(--cream);position:relative;overflow:hidden}
+header{background:linear-gradient(135deg,#ff7a00,#ff9b25);color:white;padding:20px 18px 24px;position:relative;border-radius:0 0 30px 30px}
+header:after{content:"";position:absolute;right:16px;top:12px;width:70px;height:70px;border-radius:50%;background:#fff4a3;opacity:.28}
+.brand{font-weight:900;letter-spacing:.04em;font-size:12px}
+h1{font-size:30px;line-height:1;margin:8px 0 5px;text-shadow:2px 2px 0 #7a2b00}
+.subtitle{font-weight:700}
+main{padding:18px}
+.card{background:white;border:3px solid #2d1740;border-radius:24px;padding:20px;box-shadow:0 7px 0 #2d1740;margin-bottom:18px}
+.hero{text-align:center}
+.hero .pumpkin{font-size:72px;filter:drop-shadow(0 4px 0 #9b4a00)}
+.hero h2{font-size:24px;margin:4px 0 8px}
+.hero p{margin:0;color:#5e4768}
+.name{width:100%;padding:13px 15px;border:2px solid #c8b7d2;border-radius:14px;margin:10px 0 4px;background:#fff}
+.primary{width:100%;border:0;border-radius:16px;background:var(--purple);color:white;font-weight:900;padding:15px 18px;box-shadow:0 5px 0 #3c187d;cursor:pointer}
+.primary:active{transform:translateY(3px);box-shadow:0 2px 0 #3c187d}
+.secondary{width:100%;border:2px solid var(--purple);border-radius:15px;background:white;color:var(--purple);font-weight:800;padding:13px;margin-top:9px;cursor:pointer}
+.progress{display:flex;gap:5px;margin:2px 0 15px}
+.dot{height:9px;flex:1;border-radius:10px;background:#e3d9e8}
+.dot.done{background:var(--orange)}
+.mission-no{font-size:12px;font-weight:900;color:var(--purple);letter-spacing:.08em}
+.mission-title{font-size:25px;font-weight:950;margin:4px 0 8px}
+.mission-icon{font-size:54px;text-align:center;margin:4px}
+.instruction{font-size:16px;line-height:1.65;margin:10px 0 14px}
+.english{background:#fff1d2;border:2px dashed var(--orange);border-radius:16px;padding:14px;text-align:center;font-size:18px;font-weight:900}
+.tip{font-size:12px;color:#735f7c;margin-top:10px}
+.complete{background:var(--green)!important;box-shadow:0 5px 0 #19703e!important}
+.success{text-align:center}
+.success .big{font-size:72px}
+.answer-box{font-size:25px;text-align:center;font-weight:900;letter-spacing:.12em;background:#f5edff;border:2px solid #b99ce4;border-radius:14px;padding:14px;margin:12px 0}
+.photo{border:3px dashed var(--orange);border-radius:18px;padding:15px;text-align:center;background:#fffaf2}
+.photo input{width:100%;margin:8px 0}
+.preview{max-width:100%;max-height:180px;border-radius:14px;display:none;margin:8px auto}
+.rules{font-size:12px;line-height:1.7;color:#6d5a73}
+footer{text-align:center;padding:10px 18px 30px;color:#7a657f;font-size:11px}
+.hidden{display:none!important}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:20;display:none}
+.confetti span{position:absolute;font-size:26px;animation:fall 1.8s linear forwards}
+@keyframes fall{0%{transform:translateY(-20vh) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+.small-badge{display:inline-block;background:#2d1740;color:white;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:800}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">🎃 ENGLISH SCHOOL HALLOWEEN EVENT</div>
+  <h1>Halloween<br>Mission Rally</h1>
+  <div class="subtitle">8 missions → Halloween Master!</div>
+</header>
+
+<main>
+  <section id="start" class="card hero">
+    <div class="pumpkin">🎃</div>
+    <h2>魔女のミッションを<br>クリアしよう！</h2>
+    <p>ショッピングモールを舞台にした<br>ハロウィン英語ミッションラリー</p>
+    <input id="playerName" class="name" maxlength="20" placeholder="なまえ（任意）">
+    <button class="primary" onclick="startGame()">START MISSION 🧙‍♀️</button>
+    <div class="rules">走らない・お店の商品に触らない・決められた場所だけで遊ぶ。<br>困ったら近くのスタッフへ。</div>
+  </section>
+
+  <section id="game" class="hidden">
+    <div class="progress" id="progress"></div>
+    <div id="missionCard" class="card"></div>
+  </section>
+</main>
+<footer>Happy Halloween! 👻🦇🎃</footer>
+</div>
+<div id="confetti" class="confetti"></div>
+
+<script>
+const missions=[
+ {icon:"🍊",no:"MISSION 1",title:"ORANGE HUNT",html:`
+   <div class="instruction">オレンジ色のものを <b>5個</b> 見つけてね！<br>見つけたら、元気よく英語で言おう。</div>
+   <div class="english">“I found orange!” 🧡</div>
+   <div class="tip">※ お店の商品を触らず、目で見つけよう。</div>`},
+ {icon:"👻",no:"MISSION 2",title:"HALLOWEEN HUNT",html:`
+   <div class="instruction"><b>モンスター・コウモリ・Jack-o'-lantern</b>を見つけてね！</div>
+   <div class="answer-box">👹　🦇　🎃</div>
+   <div class="tip">※ 会場に用意されたハロウィン装飾やカードを探そう。</div>`},
+ {icon:"🗣️",no:"MISSION 3",title:"HAPPY HALLOWEEN!",html:`
+   <div class="instruction"><b>3人</b>の人に “Happy Halloween!” と言ってみよう！</div>
+   <div class="english">“Happy Halloween!” 🎃</div>
+   <div class="tip">※ 家族・お友だち・イベントスタッフなど、声をかけてOKな人に。無理に知らない人へ声をかけなくて大丈夫。</div>`},
+ {icon:"🔍",no:"MISSION 4",title:"SECRET WORD",html:`
+   <div class="instruction">会場に隠された<strong>4文字の秘密の英単語</strong>を探してね！</div>
+   <div class="answer-box">_ _ _ _</div>
+   <div class="tip">ヒント：ハロウィンに関係する4文字。<br>※正解ワードは主催者が会場に掲示して設定してください。</div>
+   <input id="secret" class="name" maxlength="4" autocomplete="off" placeholder="見つけた4文字を入力">
+   <button class="secondary" onclick="checkSecret()">CHECK SECRET WORD</button>
+   <div id="secretMsg" class="tip"></div>`},
+ {icon:"👻",no:"MISSION 5",title:"GHOST COUNT",html:`
+   <div class="instruction"><b>6つのゴースト</b>が会場に隠れているよ。全部探してみよう！</div>
+   <div class="answer-box">👻 👻 👻 👻 👻 👻</div>
+   <div class="tip">見つけたら6匹すべて確認して、クリア！</div>`},
+ {icon:"📸",no:"MISSION 6",title:"PHOTO BOOTH",html:`
+   <div class="instruction"><b>2階の写真ブース</b>へ行って、自分の写真を撮ろう！</div>
+   <div class="photo">📷✨<br><b>PHOTO BOOTH</b><br>
+   <input id="photo" type="file" accept="image/*" capture="environment" onchange="previewPhoto(event)">
+   <img id="preview" class="preview" alt="photo preview">
+   <div class="tip">写真を撮ったら「PHOTO TAKEN」を押してね。</div></div>`},
+ {icon:"✊",no:"MISSION 7",title:"ROCK, PAPER, SCISSORS!",html:`
+   <div class="instruction"><b>クリストファー先生</b>か<b>ハツホ先生</b>を見つけて、ジャンケン！</div>
+   <div class="english">“Rock, Paper, Scissors!” ✊✋✌️</div>
+   <div class="tip">先生に勝ったら、最後のミッションへ！</div>`},
+ {icon:"🍬",no:"MISSION 8",title:"TRICK OR TREAT!",html:`
+   <div class="success"><div class="big">🍬🎃🍬</div>
+   <div class="instruction"><b>受付へGO!</b><br>受付で大きな声で<br><span class="english">“Trick or treat!”</span><br>と言って、この画面を見せよう。</div>
+   <span class="small-badge">MISSION COMPLETE!</span>
+   <div class="tip">🎉 お菓子をGET！ Happy Halloween!</div></div>`}
+];
+
+let current=0, secretAnswer="BATS"; // 会場の実際の4文字に変更可能
+
+function startGame(){
+ const name=document.getElementById("playerName").value.trim();
+ localStorage.setItem("halloweenPlayer",name);
+ document.getElementById("start").classList.add("hidden");
+ document.getElementById("game").classList.remove("hidden");
+ current=0; render();
+}
+function render(){
+ const prog=document.getElementById("progress");
+ prog.innerHTML=missions.map((_,i)=>`<div class="dot ${i<current?'done':''}"></div>`).join("");
+ const m=missions[current];
+ let extra="";
+ if(current<7){
+   extra=`<button id="completeBtn" class="primary" onclick="completeMission()">${current===6?"I WON! 次へ 🎉":"MISSION COMPLETE! ✓"}</button>`;
+ }
+ document.getElementById("missionCard").innerHTML=`
+   <div class="mission-no">${m.no}</div>
+   <div class="mission-icon">${m.icon}</div>
+   <div class="mission-title">${m.title}</div>
+   ${m.html}${extra}`;
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function completeMission(){
+ if(current===6){
+   // Staff/teacher confirms the child won. This avoids requiring camera access or identity checks.
+   showWin();
+ } else {
+   current++;
+   if(current===7) burst();
+   render();
+ }
+}
+function showWin(){current=7;burst();render();}
+function checkSecret(){
+ const v=(document.getElementById("secret").value||"").trim().toUpperCase();
+ const msg=document.getElementById("secretMsg");
+ if(v===secretAnswer){msg.textContent="✨ Correct! Secret word found!";msg.style.color="#19703e";setTimeout(()=>{current++;render()},500);}
+ else {msg.textContent="もう一度探してみよう！ ヒント：4文字";msg.style.color="#c44";}
+}
+function previewPhoto(e){
+ const f=e.target.files[0]; if(!f)return;
+ const img=document.getElementById("preview"); img.src=URL.createObjectURL(f); img.style.display="block";
+ const btn=document.getElementById("completeBtn"); if(btn){btn.textContent="PHOTO TAKEN ✓";btn.classList.add("complete");}
+}
+function burst(){
+ const c=document.getElementById("confetti");c.innerHTML="";
+ const chars=["🎃","👻","🦇","🍬","✨","🧙‍♀️"];
+ for(let i=0;i<35;i++){let s=document.createElement("span");s.textContent=chars[i%chars.length];s.style.left=Math.random()*100+"%";s.style.top=(-10-Math.random()*30)+"%";s.style.animationDelay=Math.random()*.7+"s";c.appendChild(s);}
+ c.style.display="block";setTimeout(()=>c.style.display="none",2300);
+}
+</script>
+</body>
+</html>
